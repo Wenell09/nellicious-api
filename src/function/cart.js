@@ -172,4 +172,43 @@ async function deleteCart(req, res) {
 }
 
 
-module.exports = { addCart, getCart, deleteCart }
+async function updateCart(req, res) {
+    const { user_id, product_id, quantity } = req.body;
+    if (!user_id || !product_id || !quantity) {
+        return res.status(404).json({
+            status: "error",
+            message: "Pastikan semua field telah terisi!"
+        });
+    }
+    // ambil harga produk
+    const { data: productData, error: productError } = await supabase
+        .from("product")
+        .select("price")
+        .eq("product_id", product_id)
+    if (productError) {
+        return res.status(404).json({
+            status: "error",
+            message: productError.message
+        });
+    }
+    let update_total_price = 0;
+    update_total_price += (productData[0].price * quantity);
+    const { data, error } = await supabase
+        .from("cart")
+        .update({ quantity: quantity, total_price: update_total_price, created_at: new Date().toLocaleString() })
+        .eq("user_id", user_id)
+        .eq("product_id", product_id)
+    if (error) {
+        return res.status(404).json({
+            status: "error",
+            message: error.message
+        });
+    }
+    return res.json({
+        status: "success",
+        message: `cart product id:${product_id} berhasil diupdate`
+    });
+}
+
+
+module.exports = { addCart, getCart, deleteCart, updateCart }

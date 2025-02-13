@@ -36,6 +36,26 @@ async function addFavorite(req, res) {
             message: error.message
         });
     }
+    const { data: productData, error: productError } = await supabase
+        .from("product")
+        .select("number_of_favorites")
+        .eq("product_id", product_id)
+    if (productError) {
+        return res.status(404).json({
+            status: "error",
+            message: error.message
+        });
+    }
+    const { data: productUpdateData, error: productUpdateError } = await supabase
+        .from("product")
+        .update({ number_of_favorites: (productData[0].number_of_favorites + 1) })
+        .eq("product_id", product_id)
+    if (productUpdateError) {
+        return res.status(404).json({
+            status: "error",
+            message: error.message
+        });
+    }
     return res.json({
         status: "success",
         message: "Favorite berhasil ditambah!"

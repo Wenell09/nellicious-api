@@ -5,7 +5,7 @@ const { registerAccount, loginAccount } = require("./function/auth");
 const { getAccount, editAccount, deleteAccount } = require("./function/user");
 const { addProduct, getAllProduct, getProductByCategory, getProductById, editProduct, deleteProduct, searchProduct } = require("./function/product");
 const { addFavorite, getFavorite, deleteFavorite } = require("./function/favorite");
-const { addCart, getCart, deleteCart } = require("./function/cart");
+const { addCart, getCart, deleteCart, updateCart } = require("./function/cart");
 const { addTransaction, getTransaction, getTransactionUser } = require("./function/transaction");
 
 const app = express();
@@ -40,6 +40,7 @@ app.delete("/deleteFavorite/:user_id/:favorite_id?", deleteFavorite);
 // route cart
 app.post("/addCart", addCart);
 app.get("/cart/:user_id", getCart);
+app.patch("/updateCart", updateCart);
 app.delete("/deleteCart/:user_id/:cart_id?", deleteCart);
 // route transaction
 app.post("/addTransaction", addTransaction);
