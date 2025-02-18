@@ -92,14 +92,14 @@ async function getFavorite(req, res) {
 }
 
 async function deleteFavorite(req, res) {
-    const { user_id, favorite_id } = req.params;
+    const { user_id, product_id } = req.params;
     if (!user_id) {
         return res.status(404).json({
             status: "error",
             message: "pastikan semua field telah terisi!"
         });
     }
-    if (!favorite_id) {
+    if (!product_id) {
         const { data, error } = await supabase
             .from("favorite")
             .delete()
@@ -119,8 +119,28 @@ async function deleteFavorite(req, res) {
         .from("favorite")
         .delete()
         .eq("user_id", user_id)
-        .eq("favorite_id", favorite_id)
+        .eq("product_id", product_id)
     if (error) {
+        return res.status(404).json({
+            status: "error",
+            message: error.message
+        });
+    }
+    const { data: productData, error: productError } = await supabase
+        .from("product")
+        .select("number_of_favorites")
+        .eq("product_id", product_id)
+    if (productError) {
+        return res.status(404).json({
+            status: "error",
+            message: error.message
+        });
+    }
+    const { data: productUpdateData, error: productUpdateError } = await supabase
+        .from("product")
+        .update({ number_of_favorites: (productData[0].number_of_favorites - 1) })
+        .eq("product_id", product_id)
+    if (productUpdateError) {
         return res.status(404).json({
             status: "error",
             message: error.message

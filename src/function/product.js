@@ -3,8 +3,8 @@ const { v4: uuidv4 } = require('uuid');
 
 async function addProduct(req, res) {
     const product_id = uuidv4();
-    const { name, image, price, ratings, number_of_ratings, number_of_favorites, number_of_sales, category_id, description } = req.body;
-    if (!product_id || !name || !image || !price || !ratings || !number_of_ratings || !number_of_favorites || !number_of_sales || !category_id || !description) {
+    const { name, image, price, ratings, total_ratings, number_of_ratings, number_of_favorites, number_of_sales, category_id, description } = req.body;
+    if (!product_id || !name || !image || !price || !ratings || !total_ratings || !number_of_ratings || !number_of_favorites || !number_of_sales || !category_id || !description) {
         return res.status(404).json({
             status: "failed",
             message: "pastikan semua field terisi!"
@@ -12,7 +12,7 @@ async function addProduct(req, res) {
     }
     const { data, error } = await supabase
         .from("product")
-        .insert([{ product_id, name, image, price, ratings, number_of_ratings, number_of_favorites, number_of_sales, category_id, description, created_at: new Date().toLocaleString() }])
+        .insert([{ product_id, name, image, price, ratings, total_ratings, number_of_ratings, number_of_favorites, number_of_sales, category_id, description, created_at: new Date().toLocaleString() }])
     if (error) {
         return res.status(404).json({
             status: "failed",
@@ -101,7 +101,7 @@ async function getProductById(req, res) {
 
 async function editProduct(req, res) {
     const { product_id } = req.params;
-    const { name, image, price, ratings, number_of_ratings, number_of_favorites, number_of_sales, category_id, description } = req.body;
+    const { name, image, price, ratings, total_ratings, number_of_ratings, number_of_favorites, number_of_sales, category_id, description } = req.body;
     if (!product_id) {
         return res.status(404).json({
             status: "failed",
@@ -126,7 +126,7 @@ async function editProduct(req, res) {
     }
     const { data, error } = await supabase
         .from("product")
-        .update({ name, image, price, ratings, number_of_ratings, number_of_favorites, number_of_sales, category_id, description, created_at: new Date().toLocaleString() })
+        .update({ name, image, price, ratings, total_ratings, number_of_ratings, number_of_favorites, number_of_sales, category_id, description, created_at: new Date().toLocaleString() })
         .eq("product_id", product_id)
     if (error) {
         return res.status(404).json({

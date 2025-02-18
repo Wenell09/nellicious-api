@@ -7,6 +7,7 @@ const { addProduct, getAllProduct, getProductByCategory, getProductById, editPro
 const { addFavorite, getFavorite, deleteFavorite } = require("./function/favorite");
 const { addCart, getCart, deleteCart, updateCart } = require("./function/cart");
 const { addTransaction, getTransaction, getTransactionUser } = require("./function/transaction");
+const { addReview, getReview } = require("./function/review");
 
 const app = express();
 app.use(cors());
@@ -36,7 +37,7 @@ app.delete("/deleteProduct/:product_id", deleteProduct);
 // route favorite
 app.post("/addFavorite", addFavorite);
 app.get("/favorite/:user_id", getFavorite);
-app.delete("/deleteFavorite/:user_id/:favorite_id?", deleteFavorite);
+app.delete("/deleteFavorite/:user_id/:product_id?", deleteFavorite);
 // route cart
 app.post("/addCart", addCart);
 app.get("/cart/:user_id", getCart);
@@ -46,3 +47,6 @@ app.delete("/deleteCart/:user_id/:cart_id?", deleteCart);
 app.post("/addTransaction", addTransaction);
 app.get("/transaction/:user_id", getTransaction);
 app.get("/transactionUser/", getTransactionUser);
+// route review
+app.post("/addReview", addReview);
+app.get("/review/:product_id", getReview);
