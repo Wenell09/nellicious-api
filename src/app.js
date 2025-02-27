@@ -6,7 +6,7 @@ const { getAccount, editAccount, deleteAccount } = require("./function/user");
 const { addProduct, getAllProduct, getProductByCategory, getProductById, editProduct, deleteProduct, searchProduct } = require("./function/product");
 const { addFavorite, getFavorite, deleteFavorite } = require("./function/favorite");
 const { addCart, getCart, deleteCart, updateCart } = require("./function/cart");
-const { addTransaction, getTransaction, getTransactionUser } = require("./function/transaction");
+const { addTransaction, getTransaction, getTransactionUser, handleMidtransNotification, createMidtransTransaction } = require("./function/transaction");
 const { addReview, getReview } = require("./function/review");
 
 const app = express();
@@ -45,8 +45,10 @@ app.patch("/updateCart", updateCart);
 app.delete("/deleteCart/:user_id/:cart_id?", deleteCart);
 // route transaction
 app.post("/addTransaction", addTransaction);
+app.post("/createMidtransTransaction", createMidtransTransaction);
 app.get("/transaction/:user_id", getTransaction);
-app.get("/transactionUser/", getTransactionUser);
+app.get("/transactionUser", getTransactionUser);
+app.post("/midtrans/notification", handleMidtransNotification);
 // route review
 app.post("/addReview", addReview);
 app.get("/review/:product_id", getReview);
