@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 async function addProduct(req, res) {
     const product_id = uuidv4();
     const { name, image, price, ratings, total_ratings, number_of_ratings, number_of_favorites, number_of_sales, category_id, description } = req.body;
-    if (!product_id || !name || !image || !price || !ratings || !total_ratings || !number_of_ratings || !number_of_favorites || !number_of_sales || !category_id || !description) {
+    if (!product_id || !name || !image || !price || !category_id || !description) {
         return res.status(404).json({
             status: "failed",
             message: "pastikan semua field terisi!"
